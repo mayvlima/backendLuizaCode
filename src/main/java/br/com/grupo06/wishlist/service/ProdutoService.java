@@ -64,4 +64,9 @@ public class ProdutoService {
     public void excluir (Integer codigo){
         produtoRepository.deleteById(codigo);
     }
+
+    public List<ProdutoEntity> listarTodosProdutosNaWishlistDoCliente(Integer id){
+        List<ProdutoEntity> retorno = this.produtoRepository.buscarTodosProdutoNaWishlisDoCliente(id);
+        return retorno;
+    }
 }

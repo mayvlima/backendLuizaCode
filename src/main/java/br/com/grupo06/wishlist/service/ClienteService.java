@@ -108,7 +108,6 @@ public class ClienteService {
 
         if (cliente != null && produto != null) {
             if(!cliente.getProdutos().contains(produto)){
-
             cliente.getProdutos().add(produto);
             return clienteRepository.save(cliente);}else{
                 throw new ExcecaoEsperada("Produto já adicionado na wishlist do cliente!");
@@ -116,4 +115,27 @@ public class ClienteService {
         }
         throw new ExcecaoEsperada("Cliente ou Produto inválido!");
     }
+
+    //Método para add produto na wishlist do cliente
+    public Object deletarProdutoNaWishlist(Integer id_cliente, Integer id_produto) throws Exception {
+        ClienteEntity cliente = clienteRepository.getOne(id_cliente);
+        ProdutoEntity produto = produtoRepository.getOne(id_produto);
+
+        if (cliente != null && produto != null) {
+            if(cliente.getProdutos().contains(produto)){
+                cliente.getProdutos().remove(produto);
+                return clienteRepository.save(cliente);}
+            else{
+                throw new ExcecaoEsperada("Cliente ou Produto inválido!");
+            }
+        }
+        throw new ExcecaoEsperada("Cliente ou Produto inválido!");
+    }
+
+    public ClienteEntity buscarProdutoNaWishlistDoCliente(Integer cliente_id, Integer produto_id)  {
+            ClienteEntity retorno = clienteRepository.buscarProdutoNaWishlistDoCliente(cliente_id, produto_id);
+            return retorno;
+    }
+
+
 }
