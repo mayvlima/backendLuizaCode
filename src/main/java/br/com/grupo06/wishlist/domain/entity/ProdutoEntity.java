@@ -1,6 +1,11 @@
 package br.com.grupo06.wishlist.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
+import java.util.List;
+
 
 @Entity
 @Table(name = "produto")
@@ -18,6 +23,18 @@ public class ProdutoEntity {
 
     @Column(name = "quantidade_estoque", nullable = false)
     private Integer quantidadeEstoque;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "produtos")
+    private List<ClienteEntity> clientes;
+
+    public ProdutoEntity(){
+    }
+
+    public ProdutoEntity(String nome, Double valorUnitario, Integer quantidadeEstoque) {
+        this.nome = nome;
+        this.valorUnitario = valorUnitario;
+        this.quantidadeEstoque = quantidadeEstoque;
+    }
 
     public Integer getCodigo() {
         return codigo;
@@ -49,5 +66,14 @@ public class ProdutoEntity {
 
     public void setQuantidadeEstoque(Integer quantidadeEstoque) {
         this.quantidadeEstoque = quantidadeEstoque;
+    }
+
+    @JsonIgnore
+    public List<ClienteEntity> getClientes() {
+        return clientes;
+    }
+    @JsonProperty
+    public void setClientes(List<ClienteEntity> clientes) {
+        this.clientes = clientes;
     }
 }

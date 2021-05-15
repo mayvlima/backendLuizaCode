@@ -1,10 +1,11 @@
 package br.com.grupo06.wishlist.service;
 
+
 import br.com.grupo06.wishlist.domain.entity.ClienteEntity;
 import br.com.grupo06.wishlist.domain.entity.ProdutoEntity;
 import br.com.grupo06.wishlist.domain.excecao.ExcecaoEsperada;
 import br.com.grupo06.wishlist.domain.repository.ClienteRepository;
-import jdk.nashorn.internal.runtime.ECMAException;
+import br.com.grupo06.wishlist.domain.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,10 @@ public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
 
     //Método para buscar todos os registros da tabela
     public List<ClienteEntity> listarTodos(){
@@ -31,25 +36,25 @@ public class ClienteService {
     //Método que salva o registro no banco de dados
     public ClienteEntity salvar(ClienteEntity cliente) throws ExcecaoEsperada {
         Integer codigoCliente = cliente.getCodigo() != null ? cliente.getCodigo() : 0;
-        if(cliente.getNome().equals("")){
+        if(cliente.getNome().trim().equals("")){
             throw new ExcecaoEsperada("Por favor, informe o nome do cliente!");
-        } else if(cliente.getCpf().equals("")){
+        } else if(cliente.getCpf().trim().equals("")){
             throw new ExcecaoEsperada("Por favor, informe o CPF do cliente!");
-        } else if(cliente.getTelefone().equals("")){
+        } else if(cliente.getTelefone().trim().equals("")){
             throw new ExcecaoEsperada("Por favor, informe o telfone do cliente!");
-        }else if(cliente.getEmail().equals("")) {
+        }else if(cliente.getEmail().trim().equals("")) {
             throw new ExcecaoEsperada("Por favor, informe o e-mail do cliente!");
-        }else if(cliente.getLogradouro().equals("")){
+        }else if(cliente.getLogradouro().trim().equals("")){
             throw new ExcecaoEsperada("Por favor, informe o endereço do cliente!");
-        }else if(cliente.getNumero().equals("")){
+        }else if(cliente.getNumero().trim().equals("")){
             throw new ExcecaoEsperada("Por favor, informe o número do endereço do cliente!");
-        }else if(cliente.getBairro().equals("")){
+        }else if(cliente.getBairro().trim().equals("")){
             throw new ExcecaoEsperada("Por favor, informe o bairro do endereço do cliente!");
-        }else if(cliente.getCidade().equals("")){
+        }else if(cliente.getCidade().trim().equals("")){
             throw new ExcecaoEsperada("Por favor, informe a cidade do endereço do cliente!");
-        }else if(cliente.getEstado().equals("")){
+        }else if(cliente.getEstado().trim().equals("")){
             throw new ExcecaoEsperada("Por favor, informe o estado da cidade de endereço do cliente!");
-        }else if(cliente.getCep().equals("")){
+        }else if(cliente.getCep().trim().equals("")){
             throw new ExcecaoEsperada("Por favor, informe o CEP de endereço do cliente!");
         }
         //Valida se já existe um cliente com o mesmo CPF
@@ -88,5 +93,27 @@ public class ClienteService {
     //Método para excluir um registro
     public void excluir (Integer codigo){
         clienteRepository.deleteById(codigo);
+    }
+
+    //Método para retornar todos os produtos da wishlist de um determinado cliente
+    public List<ProdutoEntity> buscarWishlist(Integer id){
+        ClienteEntity retorno = clienteRepository.getOne(id);
+        return retorno.getProdutos();
+    }
+
+    //Método para add produto na wishlist do cliente
+    public Object inserirProdutoNaWishlist(Integer id_cliente, Integer id_produto) throws Exception {
+        ClienteEntity cliente = clienteRepository.getOne(id_cliente);
+        ProdutoEntity produto = produtoRepository.getOne(id_produto);
+
+        if (cliente != null && produto != null) {
+            if(!cliente.getProdutos().contains(produto)){
+
+            cliente.getProdutos().add(produto);
+            return clienteRepository.save(cliente);}else{
+                throw new ExcecaoEsperada("Produto já adicionado na wishlist do cliente!");
+            }
+        }
+        throw new ExcecaoEsperada("Cliente ou Produto inválido!");
     }
 }

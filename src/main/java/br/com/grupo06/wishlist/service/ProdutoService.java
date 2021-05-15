@@ -29,7 +29,7 @@ public class ProdutoService {
     //Método que salva o registro no banco de dados
     public ProdutoEntity salvar(ProdutoEntity produto) throws ExcecaoEsperada {
         Integer codigoProduto = produto.getCodigo() != null ? produto.getCodigo() : 0;
-        if(produto.getNome().equals("")){
+        if(produto.getNome().trim().equals("")){
             throw new ExcecaoEsperada("Por favor, informe o nome do produto!");
         } else if(produto.getValorUnitario().equals(0.00)){
             throw new ExcecaoEsperada("Por favor, informe o valor unitário do produto!");

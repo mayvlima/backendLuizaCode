@@ -1,6 +1,8 @@
 package br.com.grupo06.wishlist.domain.entity;
 
 import javax.persistence.*;
+import java.util.List;
+
 
 @Entity
 @Table(name = "cliente")
@@ -42,6 +44,29 @@ public class ClienteEntity {
 
     @Column(length = 10, nullable = false)
     private String cep;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "wishlist",
+            joinColumns = {@JoinColumn(name = "cliente_id")},
+            inverseJoinColumns = {@JoinColumn(name = "produto_id")})
+    private List<ProdutoEntity> produtos;
+
+    public ClienteEntity(){
+    }
+
+    public ClienteEntity(String nome, String cpf, String telefone, String email, String logradouro, String numero, String bairro, String complemento, String cidade, String estado, String cep) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.email = email;
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.bairro = bairro;
+        this.complemento = complemento;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+    }
 
     public Integer getCodigo() {
         return codigo;
@@ -137,5 +162,13 @@ public class ClienteEntity {
 
     public void setCep(String cep) {
         this.cep = cep;
+    }
+
+    public List<ProdutoEntity> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<ProdutoEntity> produtos) {
+        this.produtos = produtos;
     }
 }
