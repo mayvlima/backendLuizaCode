@@ -1,12 +1,13 @@
 package br.com.grupo06.wishlist.domain.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 
 @Entity
 @Table(name = "cliente")
-public class ClienteEntity {
+public class ClienteEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +46,7 @@ public class ClienteEntity {
     @Column(length = 10, nullable = false)
     private String cep;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade ={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinTable(name = "wishlist",
             joinColumns = {@JoinColumn(name = "cliente_id")},
             inverseJoinColumns = {@JoinColumn(name = "produto_id")})

@@ -2,10 +2,8 @@ package br.com.grupo06.wishlist.service;
 
 
 import br.com.grupo06.wishlist.domain.entity.ClienteEntity;
-import br.com.grupo06.wishlist.domain.entity.ProdutoEntity;
 import br.com.grupo06.wishlist.domain.excecao.ExcecaoEsperada;
 import br.com.grupo06.wishlist.domain.repository.ClienteRepository;
-import br.com.grupo06.wishlist.domain.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -18,9 +16,6 @@ public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
 
 
     //Método para buscar todos os registros da tabela
@@ -95,47 +90,6 @@ public class ClienteService {
         clienteRepository.deleteById(codigo);
     }
 
-    //Método para retornar todos os produtos da wishlist de um determinado cliente
-    public List<ProdutoEntity> buscarWishlist(Integer id){
-        ClienteEntity retorno = clienteRepository.getOne(id);
-        return retorno.getProdutos();
-    }
-
-    //Método para add produto na wishlist do cliente
-    public Object inserirProdutoNaWishlist(Integer id_cliente, Integer id_produto) throws Exception {
-        ClienteEntity cliente = clienteRepository.getOne(id_cliente);
-        ProdutoEntity produto = produtoRepository.getOne(id_produto);
-
-        if (cliente != null && produto != null) {
-            if(!cliente.getProdutos().contains(produto)){
-            cliente.getProdutos().add(produto);
-            return clienteRepository.save(cliente);}else{
-                throw new ExcecaoEsperada("Produto já adicionado na wishlist do cliente!");
-            }
-        }
-        throw new ExcecaoEsperada("Cliente ou Produto inválido!");
-    }
-
-    //Método para add produto na wishlist do cliente
-    public Object deletarProdutoNaWishlist(Integer id_cliente, Integer id_produto) throws Exception {
-        ClienteEntity cliente = clienteRepository.getOne(id_cliente);
-        ProdutoEntity produto = produtoRepository.getOne(id_produto);
-
-        if (cliente != null && produto != null) {
-            if(cliente.getProdutos().contains(produto)){
-                cliente.getProdutos().remove(produto);
-                return clienteRepository.save(cliente);}
-            else{
-                throw new ExcecaoEsperada("Cliente ou Produto inválido!");
-            }
-        }
-        throw new ExcecaoEsperada("Cliente ou Produto inválido!");
-    }
-
-    public ClienteEntity buscarProdutoNaWishlistDoCliente(Integer cliente_id, Integer produto_id)  {
-            ClienteEntity retorno = clienteRepository.buscarProdutoNaWishlistDoCliente(cliente_id, produto_id);
-            return retorno;
-    }
 
 
 }

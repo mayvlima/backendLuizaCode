@@ -13,5 +13,6 @@ public interface ProdutoRepository extends JpaRepository<ProdutoEntity, Integer>
     @Query(value = "select * from produto as produto inner join wishlist on produto.codigo = wishlist.produto_id "
             +"inner join cliente as cliente on cliente.codigo = wishlist.cliente_id "
             +"where cliente.codigo = :cliente_id", nativeQuery = true)
-    public List<ProdutoEntity> buscarTodosProdutoNaWishlisDoCliente(@Param("cliente_id") Integer idCliente);
+    public List<ProdutoEntity> buscarTodosProdutosNaWishlisDoCliente(@Param("cliente_id") Integer idCliente);
+
 }

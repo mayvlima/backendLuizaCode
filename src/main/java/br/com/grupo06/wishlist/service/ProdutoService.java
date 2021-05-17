@@ -61,12 +61,19 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
     //Método para excluir um registro
-    public void excluir (Integer codigo){
-        produtoRepository.deleteById(codigo);
+    public void excluir (Integer codigo) throws ExcecaoEsperada {
+        Optional<ProdutoEntity> produto = produtoRepository.findById(codigo);
+
+        if(produto.isPresent()){
+            produto.get().getClientes().forEach(clienteEntity -> {
+                clienteEntity.getProdutos().remove(produto.get());
+            });
+            produtoRepository.deleteById(codigo);
+        }else {
+            throw new ExcecaoEsperada("Produto não encontrado!");
+        }
+
+
     }
 
-    public List<ProdutoEntity> listarTodosProdutosNaWishlistDoCliente(Integer id){
-        List<ProdutoEntity> retorno = this.produtoRepository.buscarTodosProdutoNaWishlisDoCliente(id);
-        return retorno;
-    }
 }

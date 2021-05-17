@@ -3,8 +3,10 @@ package br.com.grupo06.wishlist.controller;
 import br.com.grupo06.wishlist.domain.dto.WishlistDto;
 import br.com.grupo06.wishlist.domain.entity.ClienteEntity;
 import br.com.grupo06.wishlist.domain.entity.ProdutoEntity;
+import br.com.grupo06.wishlist.domain.modelViews.ClienteProdutoSimples;
 import br.com.grupo06.wishlist.service.ClienteService;
 import br.com.grupo06.wishlist.service.ProdutoService;
+import br.com.grupo06.wishlist.service.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +25,16 @@ public class WishlistController {
     @Autowired
     private ProdutoService produtoService;
 
+    @Autowired
+    private WishlistService wishlistService;
+
     @GetMapping("/wishlist/{idCliente}")
     public ResponseEntity wishlistDoCliente(@PathVariable("idCliente") Integer id) {
 
         Optional<ClienteEntity> cliente = this.clienteService.listarPorCodigo(id);
 
         if (cliente.isPresent()) {
-            List<ProdutoEntity> wishlist = produtoService.listarTodosProdutosNaWishlistDoCliente(id);
+            List<ProdutoEntity> wishlist = wishlistService.buscarWishlistDoCliente(id);
 
             return new ResponseEntity(wishlist, HttpStatus.FOUND);
         } else {
@@ -39,22 +44,38 @@ public class WishlistController {
     }
 
     @PostMapping("/wishlist")
-    public  ResponseEntity salvarNovoProdutoWishlist(@RequestBody WishlistDto wishlistDto) {
-        try {
-            this.clienteService.inserirProdutoNaWishlist(wishlistDto.getId_cliente(),wishlistDto.getId_produto());
-            return ResponseEntity.status(HttpStatus.CREATED).body("Produto adicionado com sucesso!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    public  ResponseEntity salvarNovoProdutoWishlist(@RequestBody WishlistDto wishlistDto){
+
+        Optional<ClienteEntity> cliente = this.clienteService.listarPorCodigo(wishlistDto.getId_cliente());
+        Optional<ProdutoEntity> produto = this.produtoService.listarPorCodigo(wishlistDto.getId_produto());
+
+        if (cliente.isPresent() && produto.isPresent()) {
+            try{
+                ClienteEntity resposta = wishlistService.inserirProdutoNaWishlist(cliente.get(),produto.get());
+                return ResponseEntity.status(HttpStatus.OK).body("Produto incluído com sucesso!");
+            }catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            }
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente ou Produto não encontrado!");
         }
     }
 
     @DeleteMapping("/wishlist")
     public  ResponseEntity deletarProdutoDaWishlist(@RequestBody WishlistDto wishlistDto) {
-        try {
-            this.clienteService.deletarProdutoNaWishlist(wishlistDto.getId_cliente(),wishlistDto.getId_produto());
-            return ResponseEntity.status(HttpStatus.OK).body("Produto removido com sucesso!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+
+        Optional<ClienteEntity> cliente = this.clienteService.listarPorCodigo(wishlistDto.getId_cliente());
+        Optional<ProdutoEntity> produto = this.produtoService.listarPorCodigo(wishlistDto.getId_produto());
+
+        if(cliente.isPresent() && produto.isPresent()) {
+            try {
+                this.wishlistService.deletarProdutoNaWishlist(cliente.get(), produto.get());
+                return ResponseEntity.status(HttpStatus.OK).body("Produto removido com sucesso!");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            }
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente ou Produto não encontrado!");
         }
 
     }
@@ -65,7 +86,7 @@ public class WishlistController {
         Optional<ProdutoEntity> produto = this.produtoService.listarPorCodigo(wishlistDto.getId_produto());
 
         if (cliente.isPresent() && produto.isPresent()) {
-            ClienteEntity resposta = this.clienteService.buscarProdutoNaWishlistDoCliente(cliente.get().getCodigo(), produto.get().getCodigo());
+            ClienteProdutoSimples resposta = this.wishlistService.buscarProdutoNaWishlistDoCliente(cliente.get().getCodigo(), produto.get().getCodigo());
                 if(resposta != null){
                     return new ResponseEntity(resposta, HttpStatus.FOUND);
                 }else{

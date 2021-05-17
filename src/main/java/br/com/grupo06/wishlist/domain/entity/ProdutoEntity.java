@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 
 @Entity
 @Table(name = "produto")
-public class ProdutoEntity {
+public class ProdutoEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +25,7 @@ public class ProdutoEntity {
     @Column(name = "quantidade_estoque", nullable = false)
     private Integer quantidadeEstoque;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "produtos")
+    @ManyToMany(mappedBy = "produtos", cascade ={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ClienteEntity> clientes;
 
     public ProdutoEntity(){
