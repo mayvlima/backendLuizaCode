@@ -8,6 +8,8 @@ import br.com.grupo06.wishlist.domain.modelViews.Wishlist;
 import br.com.grupo06.wishlist.service.ClienteService;
 import br.com.grupo06.wishlist.service.ProdutoService;
 import br.com.grupo06.wishlist.service.WishlistService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@Api("MÉTODOS PARA GERENCIAMENTO DA WISHLIST")
 public class WishlistController {
 
     @Autowired
@@ -29,6 +32,7 @@ public class WishlistController {
     @Autowired
     private WishlistService wishlistService;
 
+    @ApiOperation(value = "Listar a wishlist de um cliente")
     @GetMapping("/wishlist/{idCliente}")
     public ResponseEntity wishlistDoCliente(@PathVariable("idCliente") Integer id) {
 
@@ -48,6 +52,7 @@ public class WishlistController {
 
     }
 
+    @ApiOperation(value = "Salvar um produto na wishlist de um cliente")
     @PostMapping("/wishlist")
     public  ResponseEntity salvarNovoProdutoWishlist(@RequestBody WishlistDto wishlistDto){
 
@@ -66,6 +71,7 @@ public class WishlistController {
         }
     }
 
+    @ApiOperation(value = "Remover um produto da wishlist de um cliente")
     @DeleteMapping("/wishlist")
     public  ResponseEntity deletarProdutoDaWishlist(@RequestBody WishlistDto wishlistDto) {
 
@@ -85,6 +91,7 @@ public class WishlistController {
 
     }
 
+    @ApiOperation(value = "Verificar se um produto está na wishlist de um cliente")
     @GetMapping("/wishlist/buscar")
     public  ResponseEntity procurarProdutoNaWishlistdoCliente(@RequestBody WishlistDto wishlistDto) {
         Optional<ClienteEntity> cliente = this.clienteService.listarPorCodigo(wishlistDto.getId_cliente());
