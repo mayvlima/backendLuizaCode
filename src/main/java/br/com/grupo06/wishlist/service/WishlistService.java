@@ -20,11 +20,6 @@ public class WishlistService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    //Método para retornar todos os produtos da wishlist de um determinado cliente
-    public List<ProdutoEntity> buscarWishlistDoCliente(Integer id){
-        List<ProdutoEntity> retorno = this.produtoRepository.buscarTodosProdutosNaWishlisDoCliente(id);
-        return retorno;
-    }
 
     //Método para add produto na wishlist do cliente
     public ClienteEntity inserirProdutoNaWishlist(ClienteEntity cliente, ProdutoEntity produto) throws ExcecaoEsperada {
@@ -39,7 +34,6 @@ public class WishlistService {
                 cliente.getProdutos().add(produto);
                 return clienteRepository.save(cliente);
             }
-
     }
 
     //Método para deletar produto na wishlist do cliente
@@ -60,8 +54,9 @@ public class WishlistService {
         if(retorno != null){
             ClienteProdutoSimples clienteDesejado = new ClienteProdutoSimples();
 
+            clienteDesejado.setId(retorno.getCodigo());
             clienteDesejado.setNome(retorno.getNome());
-            clienteDesejado.setCpf(retorno.getCpf());
+            clienteDesejado.setEmail(retorno.getEmail());
 
            for(ProdutoEntity p : retorno.getProdutos()){
                 if(p.getCodigo().equals(produto_id)){

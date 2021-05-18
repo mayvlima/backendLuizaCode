@@ -4,6 +4,7 @@ import br.com.grupo06.wishlist.domain.dto.WishlistDto;
 import br.com.grupo06.wishlist.domain.entity.ClienteEntity;
 import br.com.grupo06.wishlist.domain.entity.ProdutoEntity;
 import br.com.grupo06.wishlist.domain.modelViews.ClienteProdutoSimples;
+import br.com.grupo06.wishlist.domain.modelViews.Wishlist;
 import br.com.grupo06.wishlist.service.ClienteService;
 import br.com.grupo06.wishlist.service.ProdutoService;
 import br.com.grupo06.wishlist.service.WishlistService;
@@ -34,7 +35,11 @@ public class WishlistController {
         Optional<ClienteEntity> cliente = this.clienteService.listarPorCodigo(id);
 
         if (cliente.isPresent()) {
-            List<ProdutoEntity> wishlist = wishlistService.buscarWishlistDoCliente(id);
+            Wishlist wishlist = new Wishlist();
+            wishlist.setId(cliente.get().getCodigo());
+            wishlist.setNome(cliente.get().getNome());
+            wishlist.setEmail(cliente.get().getEmail());
+            wishlist.setProdutos(cliente.get().getProdutos());
 
             return new ResponseEntity(wishlist, HttpStatus.FOUND);
         } else {
@@ -51,7 +56,7 @@ public class WishlistController {
 
         if (cliente.isPresent() && produto.isPresent()) {
             try{
-                ClienteEntity resposta = wishlistService.inserirProdutoNaWishlist(cliente.get(),produto.get());
+                wishlistService.inserirProdutoNaWishlist(cliente.get(),produto.get());
                 return ResponseEntity.status(HttpStatus.OK).body("Produto incluído com sucesso!");
             }catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

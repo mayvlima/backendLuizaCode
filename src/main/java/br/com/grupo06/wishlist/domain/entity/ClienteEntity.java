@@ -1,5 +1,7 @@
 package br.com.grupo06.wishlist.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -165,6 +167,7 @@ public class ClienteEntity implements Serializable {
         this.cep = cep;
     }
 
+    @JsonIgnore
     public List<ProdutoEntity> getProdutos() {
         return produtos;
     }

@@ -2,7 +2,9 @@ package br.com.grupo06.wishlist.domain.modelViews;
 
 import br.com.grupo06.wishlist.domain.entity.ProdutoEntity;
 
-public class ClienteProdutoSimples {
+import java.util.List;
+
+public class Wishlist {
 
     private Integer id;
 
@@ -10,7 +12,7 @@ public class ClienteProdutoSimples {
 
     private String email;
 
-    private ProdutoEntity produto;
+    private List<ProdutoEntity> produtos;
 
     public Integer getId() {
         return id;
@@ -36,11 +38,11 @@ public class ClienteProdutoSimples {
         this.nome = nome;
     }
 
-    public ProdutoEntity getProduto() {
-        return produto;
+    public List<ProdutoEntity> getProdutos() {
+        return produtos;
     }
 
-    public void setProduto(ProdutoEntity produto) {
-        this.produto = produto;
+    public void setProdutos(List<ProdutoEntity> produto) {
+        this.produtos = produto;
     }
 }
