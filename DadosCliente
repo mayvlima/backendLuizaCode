@@ -1,0 +1,49 @@
+create table cliente( 
+codigo                  number not null,
+nome varchar(250)        not null,
+cpf varchar(14)         not null,
+telefone varchar(14)    not null,
+email varchar(100)       not null,
+logradouro varchar(250) not null,
+numero varchar(15)      not null,
+bairro  varchar(100)     not null,
+complemento varchar(50)  not null,
+cidade varchar(100)  not null,
+estado varchar(50)  not null,
+cep varchar(10)  not null);
+
+
+insert into cliente 
+(codigo, nome, cpf, telefone, email, logradouro, numero, bairro, complemento, cidade, estado, cep)
+values (6, 'PEDRO', 217966709, 1190203362,'pedro@gmail.com','rua Augusto', 78, 'Parque da flores', 'casa', 'Belo Horizonte', 'Minas Gerais', 04567000);
+
+insert into cliente (codigo, nome, cpf, telefone, email, logradouro, numero, bairro, complemento, cidade, estado, cep)
+values (4,'LUCIANA',1956780945,1182202630,'lucia@hotmail.com','avenida Sao lucas',12,'Jardim Luz','apartamento 8','Mato grosso','Várzea Grande',036252100);
+
+insert into cliente (codigo, nome, cpf, telefone, email, logradouro, numero, bairro, complemento, cidade, estado, cep)
+values (1,'CARLA',1156780945,1182202610,'carl@hotmail.com','avenida Pedrosa',18,'Jardim Sao Pedro','apartamento 12','Sao Paulo','Sao Paulo',030352100);
+
+select * from cliente;
+
+
+
+create table produto (codigo number(10), nome varchar(100),
+valor_unitario double not null, quantidade_estoque int not null);
+
+insert into produto
+(codigo, nome, valor_unitario, quantidade_estoque)
+values(1, 'Celular', 799.90, 6);
+
+insert into produto
+(codigo, nome, valor_unitario, quantidade_estoque)
+values(2, 'Fritadeira', 249.67, 7);
+
+insert into produto
+(codigo, nome, valor_unitario, quantidade_estoque)
+values(5, 'escova', 179.90, 4);
+
+insert into produto
+(codigo, nome, valor_unitario, quantidade_estoque)
+values(9, 'Secador', 909.90, 9);
+
+select * from produto;
