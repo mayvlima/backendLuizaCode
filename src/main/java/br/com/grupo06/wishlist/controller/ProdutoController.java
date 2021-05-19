@@ -61,11 +61,11 @@ public class ProdutoController {
     public ResponseEntity atualizar( @RequestBody ProdutoEntity produto) {
         try {
 
-            this.produtoService.salvar(produto);
+            this.produtoService.atualizar(produto);
             return ResponseEntity.status(HttpStatus.OK).body("Produto atualizado com sucesso!");
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado!");
         }
     }
 

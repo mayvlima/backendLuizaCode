@@ -62,12 +62,11 @@ public class ClienteController {
     @PutMapping("/clientes")
     public ResponseEntity atualizar( @RequestBody ClienteEntity cliente) {
         try {
-
-            this.clienteService.salvar(cliente);
+            this.clienteService.atualizar(cliente);
             return ResponseEntity.status(HttpStatus.OK).body("Cliente atualizado com sucesso!");
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado!");
         }
     }
 
