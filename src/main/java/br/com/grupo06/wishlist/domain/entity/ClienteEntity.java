@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -52,7 +53,7 @@ public class ClienteEntity implements Serializable {
     @JoinTable(name = "wishlist",
             joinColumns = {@JoinColumn(name = "cliente_id")},
             inverseJoinColumns = {@JoinColumn(name = "produto_id")})
-    private List<ProdutoEntity> produtos;
+    private List<ProdutoEntity> produtos = new ArrayList<ProdutoEntity>();
 
     public ClienteEntity(){
     }

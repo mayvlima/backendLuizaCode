@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.list;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -22,6 +23,13 @@ class WishlistServiceTest {
 
     @Autowired
     WishlistService wishlistServiceTest;
+
+    @Autowired
+    ProdutoService produtoServiceTest;
+
+    @Autowired
+    ClienteService clienteServiceTest;
+
 
     @Test
     void inserirProdutoNaWishlist() throws ExcecaoEsperada {
@@ -39,6 +47,7 @@ class WishlistServiceTest {
         //given
         ClienteEntity cliente = new ClienteBuilder().defaultValues();
         ProdutoEntity produto = new ProdutoBuilder().defaultValues();
+        cliente.getProdutos().add(produto);
         // when
         wishlistServiceTest.deletarProdutoNaWishlist(cliente,produto);
         //then
@@ -46,14 +55,19 @@ class WishlistServiceTest {
     }
 
     @Test
-    void buscarProdutoNaWishlistDoCliente() {
+    void buscarProdutoNaWishlistDoCliente() throws ExcecaoEsperada {
         //given
         ClienteEntity cliente = new ClienteBuilder().defaultValues();
         ProdutoEntity produto = new ProdutoBuilder().defaultValues();
+        produtoServiceTest.salvar(produto);
+        cliente.getProdutos().add(produto);
+        clienteServiceTest.salvar(cliente);
+
         // when
         ClienteProdutoSimples clienteProdutoSimples =
-                wishlistServiceTest.buscarProdutoNaWishlistDoCliente(cliente.getCodigo(),produto.getCodigo());
+                wishlistServiceTest.buscarProdutoNaWishlistDoCliente(cliente,produto);
         //then
         assertThat(clienteProdutoSimples.getProduto().getCodigo()).isEqualTo(produto.getCodigo());
+
     }
 }

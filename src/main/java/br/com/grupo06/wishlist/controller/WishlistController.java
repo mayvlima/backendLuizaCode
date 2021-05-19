@@ -3,6 +3,7 @@ package br.com.grupo06.wishlist.controller;
 import br.com.grupo06.wishlist.domain.dto.WishlistDto;
 import br.com.grupo06.wishlist.domain.entity.ClienteEntity;
 import br.com.grupo06.wishlist.domain.entity.ProdutoEntity;
+import br.com.grupo06.wishlist.domain.excecao.ExcecaoEsperada;
 import br.com.grupo06.wishlist.domain.modelViews.ClienteProdutoSimples;
 import br.com.grupo06.wishlist.domain.modelViews.Wishlist;
 import br.com.grupo06.wishlist.service.ClienteService;
@@ -64,7 +65,7 @@ public class WishlistController {
                 wishlistService.inserirProdutoNaWishlist(cliente.get(),produto.get());
                 return ResponseEntity.status(HttpStatus.OK).body("Produto incluído com sucesso!");
             }catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
             }
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente ou Produto não encontrado!");
@@ -83,7 +84,7 @@ public class WishlistController {
                 this.wishlistService.deletarProdutoNaWishlist(cliente.get(), produto.get());
                 return ResponseEntity.status(HttpStatus.OK).body("Produto removido com sucesso!");
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
             }
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente ou Produto não encontrado!");
@@ -98,12 +99,12 @@ public class WishlistController {
         Optional<ProdutoEntity> produto = this.produtoService.listarPorCodigo(wishlistDto.getId_produto());
 
         if (cliente.isPresent() && produto.isPresent()) {
-            ClienteProdutoSimples resposta = this.wishlistService.buscarProdutoNaWishlistDoCliente(cliente.get().getCodigo(), produto.get().getCodigo());
-                if(resposta != null){
-                    return new ResponseEntity(resposta, HttpStatus.FOUND);
-                }else{
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado na wishlist do cliente!");
-                }
+            ClienteProdutoSimples resposta = this.wishlistService.buscarProdutoNaWishlistDoCliente(cliente.get(), produto.get());
+            if(resposta != null){
+                return new ResponseEntity(resposta, HttpStatus.FOUND);
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado na wishlist do cliente!");
+            }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente ou produto não encontrado!");
         }

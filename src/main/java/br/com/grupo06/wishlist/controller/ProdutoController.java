@@ -39,7 +39,7 @@ public class ProdutoController {
         if (produto.isPresent()) {
             return new ResponseEntity(produto, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto nõa encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
     }
 
@@ -81,7 +81,7 @@ public class ProdutoController {
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado!");
         }
-            //Demais exceções
+        //Demais exceções
 
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

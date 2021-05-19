@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WishlistService {
@@ -24,42 +25,42 @@ public class WishlistService {
     //Método para add produto na wishlist do cliente
     public ClienteEntity inserirProdutoNaWishlist(ClienteEntity cliente, ProdutoEntity produto) throws ExcecaoEsperada {
 
-            List<ProdutoEntity> listaProdutos = cliente.getProdutos();
+        List<ProdutoEntity> listaProdutos = cliente.getProdutos();
 
-            if(listaProdutos.contains(produto)){
-                throw new ExcecaoEsperada("Produto já está na wishlist do cliente!");
-            }else if(listaProdutos.size() == 20){
-                throw new ExcecaoEsperada("Wishlist do cliente atingiu o limite máximo de 20 produtos!");
-            }else{
-                cliente.getProdutos().add(produto);
-                return clienteRepository.save(cliente);
-            }
+        if(listaProdutos.contains(produto)){
+            throw new ExcecaoEsperada("Produto já está na wishlist do cliente!");
+        }else if(listaProdutos.size() == 20){
+            throw new ExcecaoEsperada("Wishlist do cliente atingiu o limite máximo de 20 produtos!");
+        }else{
+            listaProdutos.add(produto);
+            cliente.setProdutos(listaProdutos);
+            return clienteRepository.save(cliente);
+        }
     }
 
     //Método para deletar produto na wishlist do cliente
     public Object deletarProdutoNaWishlist(ClienteEntity cliente, ProdutoEntity produto) throws Exception {
 
-            if(cliente.getProdutos().contains(produto)){
-                cliente.getProdutos().remove(produto);
-                return clienteRepository.save(cliente);}
-            else{
-                throw new ExcecaoEsperada("Produto não está na wishlist do cliente!");
-            }
+        if(cliente.getProdutos().contains(produto)){
+            cliente.getProdutos().remove(produto);
+            return clienteRepository.save(cliente);}
+        else{
+            throw new ExcecaoEsperada("Produto não está na wishlist do cliente!");
+        }
 
     }
 
-    public ClienteProdutoSimples buscarProdutoNaWishlistDoCliente(Integer cliente_id, Integer produto_id)  {
-        ClienteEntity retorno = clienteRepository.buscarProdutoNaWishlistDoCliente(cliente_id, produto_id);
+    public ClienteProdutoSimples buscarProdutoNaWishlistDoCliente(ClienteEntity cliente, ProdutoEntity produto)  {
+        ClienteEntity retorno = clienteRepository.buscarProdutoNaWishlistDoCliente(cliente.getCodigo(), produto.getCodigo());
 
         if(retorno != null){
             ClienteProdutoSimples clienteDesejado = new ClienteProdutoSimples();
-
             clienteDesejado.setId(retorno.getCodigo());
             clienteDesejado.setNome(retorno.getNome());
             clienteDesejado.setEmail(retorno.getEmail());
 
-           for(ProdutoEntity p : retorno.getProdutos()){
-                if(p.getCodigo().equals(produto_id)){
+            for(ProdutoEntity p : retorno.getProdutos()){
+                if(p.getCodigo().equals(produto.getCodigo())){
                     clienteDesejado.setProduto(p);
                     break;
                 }

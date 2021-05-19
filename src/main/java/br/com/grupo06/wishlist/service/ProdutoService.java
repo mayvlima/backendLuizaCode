@@ -46,9 +46,9 @@ public class ProdutoService {
                 throw new ExcecaoEsperada("Nome do produto já existe!!");
             }
         }
-         return produtoRepository.save(produto);
-
+        return produtoRepository.save(produto);
     }
+
     //Método que atualiza um registro no banco
     public ProdutoEntity atualizar(ProdutoEntity produto){
         ProdutoEntity retorno = produtoRepository.getOne(produto.getCodigo());
@@ -77,3 +77,4 @@ public class ProdutoService {
     }
 
 }
+

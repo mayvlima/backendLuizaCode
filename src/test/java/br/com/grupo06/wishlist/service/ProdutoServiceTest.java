@@ -3,7 +3,6 @@ package br.com.grupo06.wishlist.service;
 import br.com.grupo06.wishlist.domain.entity.ProdutoBuilder;
 import br.com.grupo06.wishlist.domain.entity.ProdutoEntity;
 import br.com.grupo06.wishlist.domain.excecao.ExcecaoEsperada;
-import br.com.grupo06.wishlist.domain.repository.ProdutoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,7 +27,7 @@ public class ProdutoEntity implements Serializable {
     private Integer quantidadeEstoque;
 
     @ManyToMany(mappedBy = "produtos", cascade ={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<ClienteEntity> clientes;
+    private List<ClienteEntity> clientes = new ArrayList<ClienteEntity>();
 
     public ProdutoEntity(){
     }
