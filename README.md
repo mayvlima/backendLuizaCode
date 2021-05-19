@@ -70,5 +70,5 @@ Siga as instruções para executar a API.
   ### Mayara Veloso Lima
   E-mail: [may.veloso.lima@gmail.com](may.veloso.lima@gmail.com)<br>
   Linkedin: [https://www.linkedin.com/in/mayara-veloso-lima-2111b81ab](https://www.linkedin.com/in/mayara-veloso-lima-2111b81ab)<br>
-  Github: [gitHub.com/mayvlima](gitHub.com/mayvlima)<br>
+  Github: [https://github.com/mayvlima](gitHub.com/mayvlima)<br>
   
