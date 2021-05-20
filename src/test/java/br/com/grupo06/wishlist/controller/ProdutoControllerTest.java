@@ -85,7 +85,7 @@ class ProdutoControllerTest {
     @Test
     void excluir() throws Exception {
         Integer code = code2;
-        mockMvc.perform(MockMvcRequestBuilders.get("/produtos/" + code)
+        mockMvc.perform(MockMvcRequestBuilders.delete("/produtos/" + code)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
     }
 

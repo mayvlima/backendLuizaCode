@@ -5,6 +5,15 @@ public class WishlistDto {
     private Integer id_cliente;
     private Integer id_produto;
 
+    public WishlistDto(){
+
+    }
+
+    public WishlistDto(Integer id_cliente, Integer id_produto) {
+        this.id_cliente = id_cliente;
+        this.id_produto = id_produto;
+    }
+
     public Integer getId_cliente() {
         return id_cliente;
     }
