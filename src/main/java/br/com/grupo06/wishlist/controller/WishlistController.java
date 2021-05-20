@@ -46,7 +46,7 @@ public class WishlistController {
             wishlist.setEmail(cliente.get().getEmail());
             wishlist.setProdutos(cliente.get().getProdutos());
 
-            return new ResponseEntity(wishlist, HttpStatus.FOUND);
+            return new ResponseEntity(wishlist, HttpStatus.OK);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado!");
         }
