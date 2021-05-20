@@ -31,17 +31,21 @@ class ClienteControllerTest {
     private ClienteController clienteController;
 
     // Variavel para Codigos gerados pelo banco
-    private Integer code1, code2;
+    private Integer code1, code2, code3;
 
     @BeforeAll
     public void setup(){
         ClienteEntity cliente1 = new ClienteBuilder().defaultValues();
         ClienteEntity cliente2 = new ClienteBuilder().defaultValues();
+        ClienteEntity cliente3 = new ClienteBuilder().defaultValues();
         cliente2.setCpf("217966709");
+        cliente3.setCpf("217968709");
         clienteRepository.save(cliente1);
         clienteRepository.save(cliente2);
+        clienteRepository.save(cliente3);
         code1 = cliente1.getCodigo();
         code2 = cliente2.getCodigo();
+        code3 = cliente3.getCodigo();
     }
 
     // Testa o metodo 'listar()'
@@ -85,7 +89,7 @@ class ClienteControllerTest {
     // Testa o metodo 'excluir()'
     @Test
     void excluir() throws Exception {
-        Integer code = code2;
+        Integer code = code3;
         mockMvc.perform(MockMvcRequestBuilders.delete("/clientes/" + code)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
     }

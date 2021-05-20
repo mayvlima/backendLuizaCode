@@ -30,17 +30,22 @@ class ProdutoControllerTest {
     @Autowired
     private ProdutoController produtoController;
 
-    private Integer code1, code2;
+    private Integer code1, code2, code3;
 
     @BeforeAll
      public void setup(){
         ProdutoEntity produto1 = new ProdutoBuilder().defaultValues();
         ProdutoEntity produto2 = new ProdutoBuilder().defaultValues();
+        ProdutoEntity produto3 = new ProdutoBuilder().defaultValues();
         produto2.setNome("Smartphone");
+        produto2.setNome("Geladeira");
         produtoRepository.save(produto1);
         produtoRepository.save(produto2);
+        produtoRepository.save(produto3);
         code1 = produto1.getCodigo();
         code2 = produto2.getCodigo();
+        code3 = produto3.getCodigo();
+
     }
 
     // Testa o metodo 'listar()'
@@ -84,16 +89,11 @@ class ProdutoControllerTest {
     // Testa o metodo 'excluir()'
     @Test
     void excluir() throws Exception {
-        Integer code = code2;
+        Integer code = code3;
         mockMvc.perform(MockMvcRequestBuilders.delete("/produtos/" + code)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    // Encerra limpando o banco
-    @AfterAll
-    public void fim(){
-        produtoRepository.deleteAll();
-    }
 
     // Converte Object -> Json
     public static String asJsonString(final Object obj) {
