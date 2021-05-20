@@ -76,7 +76,7 @@ class ClienteControllerTest {
         ClienteEntity cliente1 = new ClienteBuilder().defaultValues();
         cliente1.setCodigo(code1);
         cliente1.setNumero("46");
-        mockMvc.perform(MockMvcRequestBuilders.put("/clientes/" + code1)
+        mockMvc.perform(MockMvcRequestBuilders.put("/clientes/")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(asJsonString(cliente1)))
                 .andExpect(MockMvcResultMatchers.status().isOk());

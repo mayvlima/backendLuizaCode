@@ -75,7 +75,7 @@ class ProdutoControllerTest {
         ProdutoEntity produto1 = new ProdutoBuilder().defaultValues();
         produto1.setCodigo(code1);
         produto1.setQuantidadeEstoque(0);
-        mockMvc.perform(MockMvcRequestBuilders.put("/produtos/" + code1)
+        mockMvc.perform(MockMvcRequestBuilders.put("/produtos/")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(asJsonString(produto1)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
