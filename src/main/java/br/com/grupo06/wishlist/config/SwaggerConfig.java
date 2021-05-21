@@ -25,14 +25,15 @@ public class SwaggerConfig {
                 .apis((Predicate<RequestHandler>) RequestHandlerSelectors.basePackage("br.com.grupo06.wishlist.controller"))
                 .paths((Predicate<String>) PathSelectors.any())
                 .build()
+                .useDefaultResponseMessages(false)
                 .apiInfo(metaData());
     }
 
     private ApiInfo metaData() {
         new Contact("Daiani Buussanello", "https://github.com/daianibusa", "daianibusa@gmail.com");
         return new ApiInfoBuilder()
-                .title("API de uma Wishlist")
-                .description("Documentação da API Wishlist")
+                .title("API de uma Wishlist - Desafio Final Luiza<Code>")
+                .description("Documentação da API Wishlist, realizado pelo grupo As últimas Jedi, para o Desafio Final do Projeto Luiza<Code>")
                 .version("1.0.0")
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")

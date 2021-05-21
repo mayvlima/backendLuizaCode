@@ -3,7 +3,6 @@ package br.com.grupo06.wishlist.controller;
 import br.com.grupo06.wishlist.domain.dto.WishlistDto;
 import br.com.grupo06.wishlist.domain.entity.ClienteEntity;
 import br.com.grupo06.wishlist.domain.entity.ProdutoEntity;
-import br.com.grupo06.wishlist.domain.excecao.ExcecaoEsperada;
 import br.com.grupo06.wishlist.domain.modelViews.ClienteProdutoSimples;
 import br.com.grupo06.wishlist.domain.modelViews.Wishlist;
 import br.com.grupo06.wishlist.service.ClienteService;
@@ -11,12 +10,14 @@ import br.com.grupo06.wishlist.service.ProdutoService;
 import br.com.grupo06.wishlist.service.WishlistService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 import java.util.Optional;
 
 @CrossOrigin
@@ -34,6 +35,11 @@ public class WishlistController {
     private WishlistService wishlistService;
 
     @ApiOperation(value = "Listar a wishlist de um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Wishlist encontrada", response = Wishlist.class),
+            @ApiResponse(code = 404, message = "Cliente não encontrado"),
+            @ApiResponse(code = 500, message = "Erro interno"),
+    })
     @GetMapping("/wishlist/{idCliente}")
     public ResponseEntity wishlistDoCliente(@PathVariable("idCliente") Integer id) {
 
@@ -54,6 +60,12 @@ public class WishlistController {
     }
 
     @ApiOperation(value = "Salvar um produto na wishlist de um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Produto incluído com sucesso"),
+            @ApiResponse(code = 404, message = "Cliente ou Produto não encontrado"),
+            @ApiResponse(code = 406, message = "Não foi aceito incluir o produto na wishlist"),
+            @ApiResponse(code = 500, message = "Erro"),
+    })
     @PostMapping("/wishlist")
     public  ResponseEntity salvarNovoProdutoWishlist(@RequestBody WishlistDto wishlistDto){
 
@@ -73,6 +85,12 @@ public class WishlistController {
     }
 
     @ApiOperation(value = "Remover um produto da wishlist de um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Produto removido com sucesso"),
+            @ApiResponse(code = 404, message = "Cliente ou Produto não encontrado"),
+            @ApiResponse(code = 406, message = "Não foi aceito excluir o produto na wishlist"),
+            @ApiResponse(code = 500, message = "Erro"),
+    })
     @DeleteMapping("/wishlist")
     public  ResponseEntity deletarProdutoDaWishlist(@RequestBody WishlistDto wishlistDto) {
 
@@ -93,6 +111,11 @@ public class WishlistController {
     }
 
     @ApiOperation(value = "Verificar se um produto está na wishlist de um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 302, message = "Produto encontrado na wishlist do cliente", response = ClienteProdutoSimples.class),
+            @ApiResponse(code = 404, message = "Não encontrado"),
+            @ApiResponse(code = 500, message = "Erro"),
+    })
     @GetMapping("/wishlist/buscar")
     public  ResponseEntity procurarProdutoNaWishlistdoCliente(@RequestBody WishlistDto wishlistDto) {
         Optional<ClienteEntity> cliente = this.clienteService.listarPorCodigo(wishlistDto.getId_cliente());
