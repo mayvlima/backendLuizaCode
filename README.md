@@ -17,24 +17,37 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias:
 * Spring Framework
 * Banco de dados relacional MySql
 
+- Link do deploy no Heroku: https://wishlistasultimasjedi.herokuapp.com
+- Swagger: https://wishlistasultimasjedi.herokuapp.com/swagger-ui.html
+
 ## Começando
 
 Siga as instruções para executar a API.
 
 ### Instalando
 
+* Esse é um projeto Maven, assegure-se que tem o Maven instalado no seu sistema
+
 1. Clone o repositório
    ```sh
    git clone https://github.com/mayvlima/backendLuizaCode.git
    ```
   
-2. Crie o arquivo _application.properties_ para configurar o acesso ao banco de dados relacional que desejar. Para este projeto, foi utilizado o MySql.
+2. Renomei o arquivo application.properties-exemplo para application.properties e utilize a configuração do banco de dados que desejar. No arquivo há exemplos de configuração para o banco MySql e H2
 
 3. Excute o projeto por qualquer IDE
    ```sh
    run
    ```
-4. Acesse os endpoints 
+4. Instale as dependências 
+    ```sh
+   mvn clean install
+   ```   
+5. Rode o projeto
+   ```sh
+   mvn spring-boot:run
+   ```
+7. Acesse os endpoints 
    ```sh
    Postman
    ```
