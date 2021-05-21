@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.websocket.server.PathParam;
 import java.util.Optional;
 
 @CrossOrigin
@@ -117,9 +118,9 @@ public class WishlistController {
             @ApiResponse(code = 500, message = "Erro"),
     })
     @GetMapping("/wishlist/buscar")
-    public  ResponseEntity procurarProdutoNaWishlistdoCliente(@RequestBody WishlistDto wishlistDto) {
-        Optional<ClienteEntity> cliente = this.clienteService.listarPorCodigo(wishlistDto.getId_cliente());
-        Optional<ProdutoEntity> produto = this.produtoService.listarPorCodigo(wishlistDto.getId_produto());
+    public  ResponseEntity procurarProdutoNaWishlistdoCliente(@RequestParam Integer id_cliente, Integer id_produto) {
+        Optional<ClienteEntity> cliente = this.clienteService.listarPorCodigo(id_cliente);
+        Optional<ProdutoEntity> produto = this.produtoService.listarPorCodigo(id_produto);
 
         if (cliente.isPresent() && produto.isPresent()) {
             ClienteProdutoSimples resposta = this.wishlistService.buscarProdutoNaWishlistDoCliente(cliente.get(), produto.get());

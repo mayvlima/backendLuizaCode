@@ -121,36 +121,29 @@ class WishlistControllerTest {
 
     @Test
     void procurarProdutoNaWishlistdoCliente() throws Exception {
-        WishlistDto wishlistDto = new WishlistDto(cl2,p1);
-        mockMvc.perform(MockMvcRequestBuilders.get("/wishlist/buscar")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(asJsonString(wishlistDto)))
+        mockMvc.perform(MockMvcRequestBuilders.get("/wishlist/buscar?id_cliente="+cl2+"&id_produto="+p1)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isFound());
     }
 
     @Test
     void procurarProdutoQueNaoEstaWishlistdoCliente() throws Exception {
-        WishlistDto wishlistDto = new WishlistDto(cl2,p2);
-        mockMvc.perform(MockMvcRequestBuilders.get("/wishlist/buscar")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(asJsonString(wishlistDto)))
+        mockMvc.perform(MockMvcRequestBuilders.get("/wishlist/buscar?id_cliente="+cl2+"&id_produto="+p2)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
     @Test
     void procurarProdutoNaWishlistdoClienteQueNaoExiste() throws Exception {
-        WishlistDto wishlistDto = new WishlistDto(3,p2);
-        mockMvc.perform(MockMvcRequestBuilders.get("/wishlist/buscar")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(asJsonString(wishlistDto)))
+        mockMvc.perform(MockMvcRequestBuilders.get("/wishlist/buscar?id_cliente="+3+"&id_produto="+p2)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
     void procurarProdutoQueNaoExisteWishlistdoCliente() throws Exception {
         WishlistDto wishlistDto = new WishlistDto(cl2,3);
-        mockMvc.perform(MockMvcRequestBuilders.get("/wishlist/buscar")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(asJsonString(wishlistDto)))
+        mockMvc.perform(MockMvcRequestBuilders.get("/wishlist/buscar?id_cliente="+cl2+"&id_produto="+3)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
