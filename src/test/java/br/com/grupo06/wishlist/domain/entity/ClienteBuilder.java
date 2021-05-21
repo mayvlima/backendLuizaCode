@@ -1,18 +1,19 @@
 package br.com.grupo06.wishlist.domain.entity;
 
+// Classe para construcao e inicializacao de objetos Clientes
 public class ClienteBuilder {
 
-    public ClienteEntity defaultValues(){
-        return new ClienteEntity(ClienteDefaultValues.NOME,
-                ClienteDefaultValues.CPF,
-                ClienteDefaultValues.TELEFONE,
-                ClienteDefaultValues.EMAIL,
-                ClienteDefaultValues.LOGRADOURO,
-                ClienteDefaultValues.NUMERO,
-                ClienteDefaultValues.BAIRRO,
-                ClienteDefaultValues.COMPLEMENTO,
-                ClienteDefaultValues.CIDADE,
-                ClienteDefaultValues.ESTADO,
-                ClienteDefaultValues.CEP); }
-
+    public ClienteEntity defaultValues(Integer index){
+        return new ClienteEntity(ClienteDefaultValues.NOME[index],
+                ClienteDefaultValues.CPF[index],
+                ClienteDefaultValues.TELEFONE[index],
+                ClienteDefaultValues.EMAIL[index],
+                ClienteDefaultValues.LOGRADOURO[index],
+                ClienteDefaultValues.NUMERO[index],
+                ClienteDefaultValues.BAIRRO[index],
+                ClienteDefaultValues.COMPLEMENTO[index],
+                ClienteDefaultValues.CIDADE[index],
+                ClienteDefaultValues.ESTADO[index],
+                ClienteDefaultValues.CEP[index]);
+    }
 }

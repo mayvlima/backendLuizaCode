@@ -34,56 +34,82 @@ class ProdutoControllerTest {
 
     @BeforeAll
      public void setup(){
-        ProdutoEntity produto1 = new ProdutoBuilder().defaultValues();
-        ProdutoEntity produto2 = new ProdutoBuilder().defaultValues();
-        ProdutoEntity produto3 = new ProdutoBuilder().defaultValues();
-        produto2.setNome("Smartphone");
-        produto2.setNome("Geladeira");
+        ProdutoEntity produto1 = new ProdutoBuilder().defaultValues(0);
+        ProdutoEntity produto2 = new ProdutoBuilder().defaultValues(1);
+        ProdutoEntity produto3 = new ProdutoBuilder().defaultValues(2);
         produtoRepository.save(produto1);
         produtoRepository.save(produto2);
         produtoRepository.save(produto3);
         code1 = produto1.getCodigo();
         code2 = produto2.getCodigo();
         code3 = produto3.getCodigo();
-
     }
 
     // Testa o metodo 'listar()'
     @Test
-    void listar() throws Exception {
+    void listarProdutosExistentes() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/produtos")
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     // Testa o metodo 'listarPorCodigo()'
     @Test
-    void listarPorCodigo() throws Exception {
+    void listarPorCodigoExistente() throws Exception {
         Integer code = code2;
         mockMvc.perform(MockMvcRequestBuilders.get("/produtos/" + code)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
     }
+    // Testa o metodo 'listarPorCodigo()' com codigo inexistente
+    @Test
+    void listarPorCodigoInexistente() throws Exception {
+        Integer code = 0;
+        mockMvc.perform(MockMvcRequestBuilders.get("/produtos/" + code)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 
     // Testa o metodo 'incluir()'
     @Test
-    void incluir() throws Exception {
-        ProdutoEntity produtoNovo = new ProdutoBuilder().defaultValues();
-        produtoNovo.setNome("Tablet");
+    void incluirProdutoNovo() throws Exception {
+        ProdutoEntity produtoNovo = new ProdutoBuilder().defaultValues(3);
         mockMvc.perform(MockMvcRequestBuilders.post("/produtos")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(asJsonString(produtoNovo)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    // Testa o metodo 'incluir()' com campo obrigatorio vazio
+    @Test
+    void incluirProdutoComNomeVazio() throws Exception {
+        ProdutoEntity produtoNovo = new ProdutoBuilder().defaultValues(3);
+        produtoNovo.setNome("");
+        mockMvc.perform(MockMvcRequestBuilders.post("/produtos")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(asJsonString(produtoNovo)))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError());
+    }
+
     // Testa o metodo 'atualizar()'
     @Test
-    void atualizar() throws Exception {
-        ProdutoEntity produto1 = new ProdutoBuilder().defaultValues();
+    void atualizarProdutoExistente() throws Exception {
+        ProdutoEntity produto1 = new ProdutoBuilder().defaultValues(0);
         produto1.setCodigo(code1);
         produto1.setQuantidadeEstoque(0);
         mockMvc.perform(MockMvcRequestBuilders.put("/produtos/")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(asJsonString(produto1)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    // Testa o metodo 'atualizar()' com produto inexistente
+    @Test
+    void atualizarProdutoInexistente() throws Exception {
+        ProdutoEntity produto1 = new ProdutoBuilder().defaultValues(0);
+        produto1.setCodigo(0);
+        produto1.setQuantidadeEstoque(0);
+        mockMvc.perform(MockMvcRequestBuilders.put("/produtos/")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(asJsonString(produto1)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     // Testa o metodo 'excluir()'
@@ -94,6 +120,13 @@ class ProdutoControllerTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    // Testa o metodo 'excluir()' usando codigo invalido
+    @Test
+    void excluirProdutoPorCodigoInvalido() throws Exception {
+        Integer code = -1;
+        mockMvc.perform(MockMvcRequestBuilders.delete("/produtos/" + code)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isInternalServerError());
+    }
 
     // Converte Object -> Json
     public static String asJsonString(final Object obj) {

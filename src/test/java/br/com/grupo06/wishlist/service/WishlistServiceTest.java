@@ -6,6 +6,7 @@ import br.com.grupo06.wishlist.domain.entity.ProdutoBuilder;
 import br.com.grupo06.wishlist.domain.entity.ProdutoEntity;
 import br.com.grupo06.wishlist.domain.excecao.ExcecaoEsperada;
 import br.com.grupo06.wishlist.domain.modelViews.ClienteProdutoSimples;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
@@ -34,8 +35,8 @@ class WishlistServiceTest {
     @Test
     void inserirProdutoNaWishlist() throws ExcecaoEsperada {
         //given
-        ClienteEntity cliente = new ClienteBuilder().defaultValues();
-        ProdutoEntity produto = new ProdutoBuilder().defaultValues();
+        ClienteEntity cliente = new ClienteBuilder().defaultValues(0);
+        ProdutoEntity produto = new ProdutoBuilder().defaultValues(0);
         // when
         ClienteEntity clienteFavoritado = wishlistServiceTest.inserirProdutoNaWishlist(cliente,produto);
         //then
@@ -45,8 +46,8 @@ class WishlistServiceTest {
     @Test
     void deletarProdutoNaWishlist() throws Exception {
         //given
-        ClienteEntity cliente = new ClienteBuilder().defaultValues();
-        ProdutoEntity produto = new ProdutoBuilder().defaultValues();
+        ClienteEntity cliente = new ClienteBuilder().defaultValues(0);
+        ProdutoEntity produto = new ProdutoBuilder().defaultValues(1);
         cliente.getProdutos().add(produto);
         // when
         wishlistServiceTest.deletarProdutoNaWishlist(cliente,produto);
@@ -57,17 +58,15 @@ class WishlistServiceTest {
     @Test
     void buscarProdutoNaWishlistDoCliente() throws ExcecaoEsperada {
         //given
-        ClienteEntity cliente = new ClienteBuilder().defaultValues();
-        ProdutoEntity produto = new ProdutoBuilder().defaultValues();
+        ClienteEntity cliente = new ClienteBuilder().defaultValues(1);
+        ProdutoEntity produto = new ProdutoBuilder().defaultValues(2);
         produtoServiceTest.salvar(produto);
         cliente.getProdutos().add(produto);
         clienteServiceTest.salvar(cliente);
-
         // when
         ClienteProdutoSimples clienteProdutoSimples =
                 wishlistServiceTest.buscarProdutoNaWishlistDoCliente(cliente,produto);
         //then
         assertThat(clienteProdutoSimples.getProduto().getCodigo()).isEqualTo(produto.getCodigo());
-
     }
 }

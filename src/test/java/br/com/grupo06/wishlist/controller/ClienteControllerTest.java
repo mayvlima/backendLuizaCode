@@ -35,11 +35,9 @@ class ClienteControllerTest {
 
     @BeforeAll
     public void setup(){
-        ClienteEntity cliente1 = new ClienteBuilder().defaultValues();
-        ClienteEntity cliente2 = new ClienteBuilder().defaultValues();
-        ClienteEntity cliente3 = new ClienteBuilder().defaultValues();
-        cliente2.setCpf("217966709");
-        cliente3.setCpf("217968709");
+        ClienteEntity cliente1 = new ClienteBuilder().defaultValues(0);
+        ClienteEntity cliente2 = new ClienteBuilder().defaultValues(1);
+        ClienteEntity cliente3 = new ClienteBuilder().defaultValues(2);
         clienteRepository.save(cliente1);
         clienteRepository.save(cliente2);
         clienteRepository.save(cliente3);
@@ -50,40 +48,70 @@ class ClienteControllerTest {
 
     // Testa o metodo 'listar()'
     @Test
-    void listar() throws Exception {
+    void listarClientesExistentes() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/clientes")
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     // Testa o metodo 'listarPorCodigo()'
     @Test
-    void listarPorCodigo() throws Exception {
+    void listarPorCodigoExistente() throws Exception {
         Integer code = code2;
         mockMvc.perform(MockMvcRequestBuilders.get("/clientes/" + code)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    // Testa o metodo 'listarPorCodigo()' com codigo inexistente
+    @Test
+    void listarPorCodigoInexistente() throws Exception {
+        Integer code = 0;
+        mockMvc.perform(MockMvcRequestBuilders.get("/clientes/" + code)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
     // Testa o metodo 'incluir()'
     @Test
-    void incluir() throws Exception {
-        ClienteEntity clienteNovo = new ClienteBuilder().defaultValues();
-        clienteNovo.setCpf("1956780945");
+    void incluirClienteNovo() throws Exception {
+        ClienteEntity clienteNovo = new ClienteBuilder().defaultValues(3);
         mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(asJsonString(clienteNovo)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    // Testa o metodo 'incluir()' com campo obrigatorio vazio
+    @Test
+    void incluirClienteComCpfVazio() throws Exception {
+        ClienteEntity clienteNovo = new ClienteBuilder().defaultValues(3);
+        clienteNovo.setCpf("");
+        mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(asJsonString(clienteNovo)))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError());
+    }
+
     // Testa o metodo 'atualizar()'
     @Test
-    void atualizar() throws Exception {
-        ClienteEntity cliente1 = new ClienteBuilder().defaultValues();
+    void atualizarClienteExistente() throws Exception {
+        ClienteEntity cliente1 = new ClienteBuilder().defaultValues(1);
         cliente1.setCodigo(code1);
         cliente1.setNumero("46");
         mockMvc.perform(MockMvcRequestBuilders.put("/clientes/")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(asJsonString(cliente1)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    // Testa o metodo 'atualizar()' com cliente inexistente
+    @Test
+    void atualizarClienteInexiste() throws Exception {
+        ClienteEntity cliente1 = new ClienteBuilder().defaultValues(1);
+        cliente1.setCodigo(0);
+        cliente1.setNumero("46");
+        mockMvc.perform(MockMvcRequestBuilders.put("/clientes/")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(asJsonString(cliente1)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     // Testa o metodo 'excluir()'
@@ -94,10 +122,12 @@ class ClienteControllerTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    // Encerra limpando o banco
-    @AfterAll
-    public void fim(){
-        clienteRepository.deleteAll();
+    // Testa o metodo 'excluir()' usando codigo invalido
+    @Test
+    void excluirClientePorCodigoInvalido() throws Exception {
+        Integer code = -1;
+        mockMvc.perform(MockMvcRequestBuilders.delete("/clientes/" + code)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     // Converte Object -> Json

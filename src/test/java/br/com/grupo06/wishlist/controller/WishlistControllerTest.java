@@ -47,18 +47,15 @@ class WishlistControllerTest {
 
     // Variavel para Codigos gerados pelo banco
     private Integer cl1, cl2;
-
     private Integer p1, p2;
 
     @BeforeAll
     public void setup(){
-        ClienteEntity cliente1 = new ClienteBuilder().defaultValues();
-        ClienteEntity cliente2 = new ClienteBuilder().defaultValues();
-        cliente2.setCpf("217966709");
+        ClienteEntity cliente1 = new ClienteBuilder().defaultValues(1);
+        ClienteEntity cliente2 = new ClienteBuilder().defaultValues(2);
 
-        ProdutoEntity produto1 = new ProdutoBuilder().defaultValues();
-        ProdutoEntity produto2 = new ProdutoBuilder().defaultValues();
-        produto2.setNome("Smartphone");
+        ProdutoEntity produto1 = new ProdutoBuilder().defaultValues(1);
+        ProdutoEntity produto2 = new ProdutoBuilder().defaultValues(2);
 
         produtoRepository.save(produto1);
         produtoRepository.save(produto2);
@@ -192,7 +189,6 @@ class WishlistControllerTest {
                 .content(asJsonString(wishlistDto)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-
 
     // Converte Object -> Json
     public static String asJsonString(final Object obj) {
