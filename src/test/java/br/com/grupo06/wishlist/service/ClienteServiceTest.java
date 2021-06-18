@@ -30,7 +30,7 @@ class ClienteServiceTest {
         //when
         List<ClienteEntity> clientesEncontrados  = clienteServiceTest.listarTodos();
         //then
-        assertThat(clientesEncontrados.size()).isEqualTo(2);
+        assertThat(clientesEncontrados.size()).isGreaterThanOrEqualTo(2);
     }
 
     @Test
